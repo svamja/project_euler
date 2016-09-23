@@ -1,6 +1,9 @@
 
+# powers of 10 indexed
 powers_10 = [ 10**exp for exp in xrange(0, 11) ]
-seed_divisors = [ 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199 ]
+# seed_divisors = [ 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199 ]
+seed_divisors = [ 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37 ]
+seed_last = seed_divisors[-1]
 
 # return array of digits of a number
 def num_to_digits(num):
@@ -10,6 +13,7 @@ def num_to_digits(num):
         num /= 10
     return digits
 
+# convert array of digits to number
 def digits_to_num(digits):
     digits_len = len(digits)
     num = 0
@@ -41,7 +45,7 @@ def is_prime_candidate(number):
 
 def is_really_prime(number):
     upper_limit = (number ** 0.5 + 1) / 6
-    n = 199/6
+    n = seed_last/6
     while True:
         if number % (n*6 - 1) == 0:
             return False
