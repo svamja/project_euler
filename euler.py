@@ -2,8 +2,9 @@
 # powers of 10 indexed
 powers_10 = [ 10**exp for exp in xrange(0, 11) ]
 # seed_divisors = [ 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199 ]
-seed_divisors = [ 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37 ]
+seed_divisors = [ 3, 5, 7, 11, 13, 17, 19, 23, 29 ]
 seed_last = seed_divisors[-1]
+prime_sieve = []
 
 # return array of digits of a number
 def num_to_digits(num):
@@ -55,6 +56,31 @@ def is_really_prime(number):
         if n > upper_limit:
             break
     return True
+
+def is_prime(number):
+    if number <= seed_last:
+        return number in seed_divisors
+    if not is_prime_candidate(number):
+        return False
+    return is_really_prime(number)
+
+def get_prime_sieve(sieve_size):
+    prime_sieve = [True] * sieve_size;
+    prime_sieve[0] = False
+    prime_sieve[1] = False
+    for n in xrange(2, sieve_size):
+        if prime_sieve[n]:
+            for i in xrange(n+n, sieve_size, n):
+                prime_sieve[i] = False
+    return prime_sieve
+
+def get_primes(upper_limit):
+    prime_sieve = get_prime_sieve(upper_limit)
+    primes = [ number for number, is_prime in enumerate(prime_sieve) if is_prime  ]
+    return primes
+
+
+
 
 # Get all divisors, including 1 and n, of a number
 def get_all_divisors(n):    
