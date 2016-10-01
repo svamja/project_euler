@@ -1,12 +1,9 @@
 import time
 start_time = time.time()
 
-# sets of 4-digit nums
+# Create Array of Figurates of Four Digits
 
 figurates = [ [] ] * 9
-figurate_lens = [ 0 ] * 9
-
-
 figurates[3] = [ n*(n+1)/2 for n in xrange(1,200) ]
 figurates[4] = [ n*n for n in xrange(1,100) ]
 figurates[5] = [ n*(3*n - 1)/2 for n in xrange(1,100) ]
@@ -18,19 +15,22 @@ four_digit_filter = lambda x: x >= 1000 and x <= 9999
 
 for n in xrange(3, 9):
     figurates[n] = filter(four_digit_filter, figurates[n])
-    figurate_lens[n] = len(figurates[n])
-    # print n, figurate_lens[n]
-    # print figurates[n]
-    # print 
+
+
+# Prepare
 
 all_sets = set([3, 4, 5, 6, 7, 8])
 iteration_count = 0
-candidates = 0
 solutions = 0
+
+# Try a number out of current set of figurates that "links" with previous set of numbers
+# ie, last nums suffix = current set's num prefix
+# if this set happens to be the last one, check it also matches with first one
+# otherwise, just push current matching numbers to sets and call this function again.
 
 def try_numbers(prev_sets, prev_numbers, current_set):
 
-    global all_sets, iteration_count, candidates, solutions
+    global all_sets, iteration_count, solutions
 
     iteration_count += 1
     if iteration_count > 100000:
@@ -51,20 +51,15 @@ def try_numbers(prev_sets, prev_numbers, current_set):
         return []
 
     if len(right_sets) == 0:
-        candidates += len(current_nums)
         for candidate_num in current_nums:
             candidate_sets = prev_sets[:]
             candidate_sets.append(current_set)
             candidate_nums = prev_numbers[:]
             candidate_nums.append(candidate_num)
-            # print candidate_nums
             last_suffix = candidate_nums[-1] % 100
             first_prefix = candidate_nums[0] / 100
             if last_suffix == first_prefix:
                 solutions += 1
-                print "THATS THE SOLUTION"
-                print candidate_nums
-                print candidate_sets
                 print sum(candidate_nums)
 
 
@@ -77,15 +72,15 @@ def try_numbers(prev_sets, prev_numbers, current_set):
             try_numbers(next_prev_sets, next_prev_numbers, next_set)
 
 
+# first call starting with set of 8, there are no prev sets yet
 try_numbers([], [], 8)
 
-print iteration_count
-print candidates
-print solutions
+print "number of solutions found: ", solutions
+print "number of iterations: ", iteration_count
 
 
 end_time = time.time()
-print "Time: ", round(end_time - start_time, 3)
+print "Time: ", round(end_time - start_time, 6)
 
 
 
