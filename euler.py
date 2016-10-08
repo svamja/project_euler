@@ -86,3 +86,40 @@ def get_primes(upper_limit):
 def get_all_divisors(n):    
     return set(reduce(list.__add__, ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
 
+cached_primes = get_primes(100)
+
+def increase_prime_cache(upper_limit):
+    global cached_primes
+    for i in xrange(cached_primes[-1] + 1, upper_limit + 1):
+        is_prime = True
+        for prime in cached_primes:
+            if i % prime == 0:
+                is_prime = False
+                break
+        if is_prime:
+            cached_primes.append(i)
+
+# Get factors of a number, with powers
+def get_factors(n):
+    global cached_primes
+    if cached_primes[-1]*cached_primes[-1] < n:
+        print "increasing", cached_primes[-1], n/cached_primes[-1]
+        increase_prime_cache(n/cached_primes[-1])
+    #     cached_primes = get_primes(n/cached_primes[-1])
+    factors = []
+    num = n
+    for prime in cached_primes:
+        prime_power = 0
+        while num % prime == 0:
+            prime_power += 1
+            num /= prime
+        if prime_power > 0:
+            factors.append([ prime, prime_power ])
+        if num < prime:
+            break
+    if num > 1:
+        factors.append([ num, 1 ])
+    return factors
+
+
+
