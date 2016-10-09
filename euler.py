@@ -90,7 +90,7 @@ cached_primes = get_primes(100)
 
 def increase_prime_cache(upper_limit):
     global cached_primes
-    for i in xrange(cached_primes[-1] + 1, upper_limit + 1):
+    for i in xrange(cached_primes[-1] + 1, upper_limit + 400):
         is_prime = True
         for prime in cached_primes:
             if i % prime == 0:
@@ -103,7 +103,6 @@ def increase_prime_cache(upper_limit):
 def get_factors(n):
     global cached_primes
     if cached_primes[-1]*cached_primes[-1] < n:
-        print "increasing", cached_primes[-1], n/cached_primes[-1]
         increase_prime_cache(n/cached_primes[-1])
     #     cached_primes = get_primes(n/cached_primes[-1])
     factors = []
@@ -119,6 +118,26 @@ def get_factors(n):
             break
     if num > 1:
         factors.append([ num, 1 ])
+    return factors
+
+# Get factors of a number, without powers
+def get_factors_without_powers(n):
+    global cached_primes
+    if cached_primes[-1]*cached_primes[-1] < n:
+        increase_prime_cache(n/cached_primes[-1] + 1)
+    factors = []
+    num = n
+    for prime in cached_primes:
+        prime_power = 0
+        while num % prime == 0:
+            prime_power += 1
+            num /= prime
+        if prime_power > 0:
+            factors.append(prime)
+        if num < prime:
+            break
+    if num > 1:
+        factors.append(num)
     return factors
 
 def get_phi(n):
