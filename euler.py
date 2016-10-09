@@ -70,7 +70,7 @@ def get_prime_sieve(sieve_size):
     prime_sieve[1] = False
     for n in xrange(2, sieve_size):
         if prime_sieve[n]:
-            for i in xrange(n+n, sieve_size, n):
+            for i in xrange(n*n, sieve_size, n):
                 prime_sieve[i] = False
     return prime_sieve
 
@@ -121,5 +121,12 @@ def get_factors(n):
         factors.append([ num, 1 ])
     return factors
 
+def get_phi(n):
+    factors = get_factors(n)
+    phi = n
+    for factor in factors:
+        phi *= (factor[0] - 1)
+        phi /= factor[0]
+    return phi
 
 
